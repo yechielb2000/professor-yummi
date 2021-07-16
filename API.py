@@ -7,10 +7,10 @@ watcher = LolWatcher(API_KEY.key)
 
 def printStats(summonerName):
     
-    summoner = watcher.summoner.by_name('eune1', summonerName)
-    stats = watcher.league.by_summoner('eune1', summoner['id'])
+    summoner = watcher.summoner.by_name('euw1', summonerName)
+    stats = watcher.league.by_summoner('euw1', summoner['id'])
 
     tier = stats[0]['tier']
     print(tier)
 
-printStats("yechiel")
+printStats("Name")
