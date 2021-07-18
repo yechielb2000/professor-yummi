@@ -9,10 +9,9 @@ def printStats(summonerName):
     stats = watcher.league.by_summoner('euw1', summoner['id'])
 
     try:
-        print(summonerName + "\nSolo/Due:" + str(flex_solo(stats, 0)) + "\nFlex 5V5:" + str(flex_solo(stats, 1)))
+        return summonerName + "\nSolo/Due:" + str(flex_solo(stats, 0)) + "\nFlex 5V5:" + str(flex_solo(stats, 1))
     except:
-        print(summonerName + "\nNo stats")
-
+        return summonerName + "\nNo stats"
 
 def flex_solo(stats, pos):
     
@@ -23,5 +22,3 @@ def flex_solo(stats, pos):
     losses = stats[pos]['losses']
     winrate = wins / (wins + losses)
     return tier, rank, str(lp) + "LP", "winrate :", str(int(math.ceil(winrate * 100))) + "%"
-
-printStats("Name")
