@@ -11,12 +11,12 @@ async def on_ready():
     print('Bot is ready.')
 
 # this command clear messages (the user can choose how many messages to delete the default is 1)
-@client.command()
+@client.command(help='this command will clear messages')
 async def clear(ctx, amount = 1):
     await ctx.channel.purge(limit=amount)
 
 # this command let the user know what is the rank stats of a player in euw1 server by typing .stats 'name of summoner'
-@client.command(aliases=['rank'])  
+@client.command(aliases=['rank'], help='this command will give you summoner stats')  
 async def stats(ctx, *,summonerName):
     await ctx.send(riot.printStats(summonerName))
 
