@@ -1,5 +1,5 @@
 from riotwatcher import LolWatcher
-import API_KEY 
+from sources import API_KEY 
 import math
 watcher = LolWatcher(API_KEY.key)
 

@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import DISCORD_TOKEN
+from sources import DISCORD_TOKEN
 
 client = commands.Bot(command_prefix = '.')
 
