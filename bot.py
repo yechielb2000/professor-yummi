@@ -1,8 +1,11 @@
 import discord
+import stat
+import champions_stats
+import lastMatch
 from discord import message
 from discord.ext import commands
 from sources import DISCORD_TOKEN
-import riot
+
 
 client = commands.Bot(command_prefix = '.')
 
@@ -10,14 +13,38 @@ client = commands.Bot(command_prefix = '.')
 async def on_ready():
     print('Bot is ready.')
 
-# this command clear messages (the user can choose how many messages to delete the default is 1)
 @client.command(help='this command will clear messages')
 async def clear(ctx, amount = 1):
     await ctx.channel.purge(limit=amount)
 
-# this command let the user know what is the rank stats of a player in euw1 server by typing .stats 'name of summoner'
 @client.command(aliases=['rank'], help='this command will give you summoner stats')  
-async def stats(ctx, *,summonerName):
-    await ctx.send(riot.printStats(summonerName))
+async def stats(ctx, *, summonerName):
+    await ctx.send(stat.printStats(summonerName))
+
+# Currently not finished
+# @client.command(help="this command will give you mastry champions of champion")
+# async def mastry(ctx, *, summonerName, championName):
+#     await ctx.send(stat.getMastry(summonerName, championName))    
+
+@client.command(help="this command will give you all champions with their id")
+async def allChampions(ctx):
+    await ctx.send(champions_stats.getAllChampions())
+
+@client.command()
+async def lastMatch(ctx: commands.Context, *, summonerName):
+
+    DATASET = lastMatch.getLastMatch(summonerName)
+
+    highlight = ['name     win     Kills     Deaths     assists     cs     total-damage     gold-earned     champion-level']
+    
+    for data in DATASET:
+        highlight.append('   '.join([str(item).center(5, ' ') for item in data]))
+   
+    description = '```'+'\n'.join(highlight) + '```'
+
+    embed = discord.Embed(title = 'Last Match Stats', description = description)
+    await ctx.send(embed = embed)    
 
 client.run(DISCORD_TOKEN.token)   
+
+
