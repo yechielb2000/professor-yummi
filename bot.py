@@ -1,8 +1,9 @@
 import discord
 import stat
 import champions_stats
-import lastMatch
+from lastMatch import getLastMatch
 from discord import message
+from discord.ext.commands import CommandNotFound
 from discord.ext import commands
 from sources import DISCORD_TOKEN
 
@@ -12,6 +13,11 @@ client = commands.Bot(command_prefix = '.')
 @client.event
 async def on_ready():
     print('Bot is ready.')
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, CommandNotFound):
+        await ctx.send(error)    
 
 @client.command(help='this command will clear messages')
 async def clear(ctx, amount = 1):
@@ -33,17 +39,23 @@ async def allChampions(ctx):
 @client.command()
 async def lastMatch(ctx: commands.Context, *, summonerName):
 
-    DATASET = lastMatch.getLastMatch(summonerName)
+    DATASET = getLastMatch(summonerName)
 
-    highlight = ['name     win     Kills     Deaths     assists     cs     total-damage     gold-earned     champion-level']
-    
-    for data in DATASET:
-        highlight.append('   '.join([str(item).center(5, ' ') for item in data]))
-   
+    highlight = ['champion      win      Kills      Deaths      assists      cs'] #  total-damage  gold-earned  champion-level
     description = '```'+'\n'.join(highlight) + '```'
+    
+    i = 0
+    for data in DATASET:
+        highlight.append(((" " * 6) + (" " * len(highlight[0].split(" "*6)[0]))).join([str(item).center(0) for item in data]))
+        # highlight.append((str(highlight[0].split(" " * 6)[i]) + ' - ').join(data))
+        # print(data)
+        i += 1
 
-    embed = discord.Embed(title = 'Last Match Stats', description = description)
-    await ctx.send(embed = embed)    
+    description = '```'+'\n'.join(highlight) + '```'
+    await ctx.send(embed = discord.Embed(title = 'Last Match Stats', description = description))
+    print(highlight)
+    
+        
 
 client.run(DISCORD_TOKEN.token)   
 

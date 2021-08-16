@@ -1,6 +1,6 @@
 from riotwatcher import LolWatcher
-from sources import API_KEY 
-watcher = LolWatcher(API_KEY.key)
+from sources import RIOT_API_KEY 
+watcher = LolWatcher(RIOT_API_KEY.key)
 
 def getLastMatch(summonerName):
     champ_dict = {}
@@ -42,7 +42,7 @@ def getLastMatch(summonerName):
 
     finalTuple = ()
     for participant in participants:
-        participantTuple = (champ_dict[str(participant['champion'])], participant['win'], participant['kills'], participant['deaths'], participant['assists'], participant['totalMinionsKilled'], participant['totalDamageDealt'], participant['goldEarned'], participant['champLevel'])
+        participantTuple = (champ_dict[str(participant['champion'])], participant['win'], participant['kills'], participant['deaths'], participant['assists'], participant['totalMinionsKilled']) #, participant['totalDamageDealt'], participant['goldEarned'], participant['champLevel']
         finalTuple += (participantTuple,)
 
     return finalTuple

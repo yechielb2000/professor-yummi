@@ -1,6 +1,6 @@
 from riotwatcher import LolWatcher
-from sources import API_KEY 
-watcher = LolWatcher(API_KEY.key)
+from sources import RIOT_API_KEY 
+watcher = LolWatcher(RIOT_API_KEY.key)
 
 def getMastry(summonerName, mastryChampion):
     # not complitted
@@ -18,7 +18,13 @@ def getAllChampions():
     static_champ_list = watcher.data_dragon.champions(latest, False, 'en_US')
     
     champs = ''
+    tempKey = 'A'
     for key in static_champ_list['data']:
-        champs += key + '\n'
+        if tempKey[0] == key[0]:
+             champs += key + ' ' 
+        else : 
+            champs += '\n'+key[0]+':\n' + key + ' '
+
+        tempKey = key    
       
-    return '\nVersion : ' + static_champ_list['version'] + '\n\n' + champs
+    return '\nVersion : ' + static_champ_list['version'] + '\nA:\n' + champs

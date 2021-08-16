@@ -1,6 +1,6 @@
 from riotwatcher import LolWatcher
-from sources import API_KEY 
-watcher = LolWatcher(API_KEY.key)
+from sources import RIOT_API_KEY 
+watcher = LolWatcher(RIOT_API_KEY.key)
 import math
 
 def printStats(summonerName):
