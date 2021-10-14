@@ -1,5 +1,5 @@
 from riotwatcher import LolWatcher
-from sources import RIOT_API_KEY 
+from secrets import RIOT_API_KEY 
 watcher = LolWatcher(RIOT_API_KEY.key)
 
 def getMastry(summonerName, mastryChampion):
