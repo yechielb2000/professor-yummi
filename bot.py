@@ -5,8 +5,8 @@ from lastMatch import getLastMatch
 from discord import message
 from discord.ext.commands import CommandNotFound
 from discord.ext import commands
-from secrets import DISCORD_TOKEN
-
+from current_server import SERVER
+import DISCORD_TOKEN
 
 client = commands.Bot(command_prefix = '.')
 
@@ -18,6 +18,13 @@ async def on_ready():
 async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
         await ctx.send(error)    
+
+@client.command(aliases=["changeServer", "server", "changeserver"], help='this command will change current server')
+async def change(ctx, serverName = "euw1"):
+    global SERVER
+    ctx.send("Your options are : euw1, eun1, na1")
+    SERVER = serverName
+    await ctx.send("current server is : ", SERVER)
 
 @client.command(help='this command will clear messages')
 async def clear(ctx, amount = 1):

@@ -1,3 +1,4 @@
-__pycache__
 secrets
 notes.py
+RIOT_API_KEY.py
+DISCORD_TOKEN.py
