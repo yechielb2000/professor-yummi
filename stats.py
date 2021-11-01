@@ -1,8 +1,8 @@
-import math
 from RIOT_API_KEY import key
 from riotwatcher import LolWatcher
 watcher = LolWatcher(key)
 from current_server import SERVER
+import math
 
 def printStats(summonerName):
     

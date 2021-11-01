@@ -1,49 +1,49 @@
 import discord
-import stat
+import stats as summonerStats
 import champions_stats
 from lastMatch import getLastMatch
-from discord import message
 from discord.ext.commands import CommandNotFound
 from discord.ext import commands
-from current_server import SERVER
+import current_server
 import DISCORD_TOKEN
 
 client = commands.Bot(command_prefix = '.')
 
 @client.event
 async def on_ready():
-    print('Bot is ready.')
+    print(f'Bot is ready as {client.user}')
 
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, CommandNotFound):
         await ctx.send(error)    
 
-@client.command(aliases=["changeServer", "server", "changeserver"], help='this command will change current server')
-async def change(ctx, serverName = "euw1"):
-    global SERVER
-    ctx.send("Your options are : euw1, eun1, na1")
-    SERVER = serverName
-    await ctx.send("current server is : ", SERVER)
+@client.command(aliases=["changeServer", "change", "changeserver"], help='This command will change current server')
+async def server(ctx, serverName):
+    current_server.SERVER = serverName + str(1)
+    await ctx.send("current server is : ", current_server.SERVER)
 
-@client.command(help='this command will clear messages')
+@client.command(help='This command will clear messages')
 async def clear(ctx, amount = 1):
     await ctx.channel.purge(limit=amount)
 
-@client.command(aliases=['rank'], help='this command will give you summoner stats')  
+@client.command(aliases=['rank'], help='This command will give you summoner stats')  
 async def stats(ctx, *, summonerName):
-    await ctx.send(stat.printStats(summonerName))
+    await ctx.send(summonerStats.printStats(summonerName))
 
-# Currently not finished
-# @client.command(help="this command will give you mastry levels of champions")
-# async def mastry(ctx, *, summonerName, championName):
-#     await ctx.send(stat.getMastry(summonerName, championName))    
+@client.command(help="This command will give you mastry levels of champions")
+async def mastery(ctx, summonerName, championName):
+    await ctx.send(champions_stats.getMastry(summonerName, championName))    
 
-@client.command(help="this command will give you all champions with their id")
+@client.command(help="This command will give you all champions in alphabetical order")
 async def allChampions(ctx):
     await ctx.send(champions_stats.getAllChampions())
 
-@client.command(help="this command will give you a full stats of the last game")
+@client.command(help="This command will return the information of the entered champion")
+async def champion(ctx, championName):
+    await ctx.send(champions_stats.getChampionInfo(championName))
+
+@client.command(help="This command will give you a full stats of the last game")
 async def lastMatch(ctx: commands.Context, *, summonerName):
     DATASET = getLastMatch(summonerName)
 

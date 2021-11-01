@@ -6,16 +6,17 @@ from current_server import SERVER
 latest = watcher.data_dragon.versions_for_region(SERVER)['n']['champion']
 champs_list = watcher.data_dragon.champions(latest, False, 'en_US')
 
-def getMastry(summonerName, search):
+def getMastry(summonerName, championName):
    
     champ_key = None
     for champion in champs_list['data']:
-        if champion.lower() == search.lower():
+        if champion.lower() == championName.lower():
             champ_key = champs_list['data'][f'{champion}']['key']
 
     summoner = watcher.summoner.by_name(SERVER, summonerName)
     championMastry = watcher.champion_mastery.by_summoner_by_champion(SERVER, summoner['id'], champion_id=champ_key)
-    print("Champion Level : " + str(championMastry['championLevel']) + "\nChampion Points : " + str(championMastry['championPoints']) + "\nChampion Tokens : " + str(championMastry['tokensEarned']) + "\nChest Granted : " + str(championMastry['chestGranted']))
+
+    return "Champion Level : " + str(championMastry['championLevel']) + "\nChampion Points : " + str(championMastry['championPoints']) + "\nChampion Tokens : " + str(championMastry['tokensEarned']) + "\nChest Granted : " + str(championMastry['chestGranted'])
 
 def getAllChampions():
 
@@ -31,7 +32,7 @@ def getAllChampions():
       
     return '\nVersion : ' + champs_list['version'] + '\nA: ' + champs
 
-def getChampionStats(search):
+def getChampionInfo(search):
 
     champ_stats = ''
     for champion in champs_list['data']:
