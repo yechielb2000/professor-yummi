@@ -6,6 +6,7 @@ from discord.ext.commands import CommandNotFound
 from discord.ext import commands
 import current_server
 import DISCORD_TOKEN
+from keep_alive import keep_alive
 
 client = commands.Bot(command_prefix = '.')
 
@@ -61,7 +62,7 @@ async def lastMatch(ctx: commands.Context, *, summonerName):
     await ctx.send(embed = discord.Embed(title = 'Last Match Stats', description = description))
     print(highlight)
     
-
+keep_alive()
 client.run(DISCORD_TOKEN.token)   
 
 
