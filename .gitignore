@@ -1,4 +1,2 @@
-secrets
-notes.py
-RIOT_API_KEY.py
-DISCORD_TOKEN.py
+__pycache__
+app_data.json

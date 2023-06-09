@@ -1,1 +1,0 @@
-SERVER = "euw1"
