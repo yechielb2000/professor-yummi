@@ -10,6 +10,7 @@ DISCORD_TOKEN = APP_DATA["discord_token"]
 client = commands.Bot(command_prefix="!")
 
 
+# TODO: refactor this page
 @client.event
 async def on_ready():
     print(f"Bot is ready as {client.user}")
