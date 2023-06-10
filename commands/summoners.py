@@ -3,7 +3,7 @@ from typing import Dict, Any
 
 
 class Summoners(BaseLolCommand):
-    def __init__(self, summoner_name: str, api_key: str, server: str = ...) -> None:
+    def __init__(self, summoner_name: str, api_key: str, server: str) -> None:
         super().__init__(api_key, server)
         self.summoner_name = summoner_name
         self.summoner = self.watcher.summoner.by_name(self.region, self.summoner_name)

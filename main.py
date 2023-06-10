@@ -1,13 +1,7 @@
-from typing import Any, Optional, Type
-import discord
 import json
 
-from discord import app_commands
-from discord.ext.commands.bot import PrefixType, _default
-from discord.ext.commands.help import HelpCommand
-import commands.champions as champions
-from discord.ext.commands import Context, CommandNotFound, Bot
 from keep_alive import keep_alive
+from discord.ext.commands import Context, CommandNotFound, Bot
 from commands.champions import Champions
 from commands.summoners import Summoners
 
@@ -77,5 +71,6 @@ async def summoner(ctx: Context, summoner_name: str, s: str = SERVER):
     await ctx.send(summoner.get_stats())
 
 
-keep_alive()
-client.run(DISCORD_TOKEN)
+if __name__ == "__main__":
+    keep_alive()
+    client.run(DISCORD_TOKEN)

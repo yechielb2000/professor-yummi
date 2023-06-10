@@ -1,11 +1,8 @@
 from riotwatcher import LolWatcher
 
 
-REGION = "eune1"
-
-
 class BaseLolCommand:
-    def __init__(self, api_key: str, region: str = REGION) -> None:
+    def __init__(self, api_key: str, region: str) -> None:
         self.region = region
         self.watcher = LolWatcher(api_key=api_key)
         self.latest_version = self.watcher.data_dragon.versions_for_region(self.region)[

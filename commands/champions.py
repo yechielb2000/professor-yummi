@@ -11,7 +11,7 @@ class Champion:
 
 
 class Champions(BaseLolCommand):
-    def __init__(self, api_key: str, server: str = ...) -> None:
+    def __init__(self, api_key: str, server: str) -> None:
         super().__init__(api_key, server)
         self.champions_data = self.champions_list[Champion.DATA]
         self.champions_keys = self.champions_list[Champion.KEYS]

@@ -2,7 +2,7 @@
 name = "repl_python3_Discord-Bot-LOL"
 version = "0.1.0"
 description = ""
-authors = ["yechielb2000 <<>>"]
+authors = ["yechielb2000"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
