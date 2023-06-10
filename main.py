@@ -1,79 +1,80 @@
+from typing import Any, Optional, Type
 import discord
 import json
+
+from discord import app_commands
+from discord.ext.commands.bot import PrefixType, _default
+from discord.ext.commands.help import HelpCommand
 import commands.champions as champions
-from discord.ext import commands
+from discord.ext.commands import Context, CommandNotFound, Bot
 from keep_alive import keep_alive
+from commands.champions import Champions
+from commands.summoners import Summoners
+
 
 APP_DATA = json.loads(open("app_data.json").read())
 API_KEY = APP_DATA["riot_api_key"]
 DISCORD_TOKEN = APP_DATA["discord_token"]
-client = commands.Bot(command_prefix="!")
+SERVER = "eune1"
+client = Bot(command_prefix="!")
 
 
-# TODO: refactor this page
 @client.event
 async def on_ready():
     print(f"Bot is ready as {client.user}")
 
 
 @client.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.CommandNotFound):
+async def on_command_error(ctx: Context, error: CommandNotFound):
+    if isinstance(error, CommandNotFound):
         await ctx.send(error)
 
 
 @client.command(
-    aliases=["changeServer", "change", "change-server"],
-    help="Change server (eune1, euw1, etc..).",
+    help="Clear messages, amount=number of messages to delete.\ndefault is 1."
 )
-@client.command(help="This command will clear messages")
-async def clear(ctx, amount: int = 1):
+async def clear(ctx: Context, amount: int = 1):
     await ctx.channel.purge(limit=amount)
 
 
-@client.command(aliases=["rank"], help="This command will give you summoner stats")
-async def stats(ctx, *, summonerName):
-    await ctx.send(summonerStats.printStats(summonerName))
+@client.command(help="Get champions list")
+async def champions_list(ctx: Context, s: str = SERVER):
+    champion = Champions(API_KEY, s)
+    await ctx.send(champion.get_champions_list())
 
 
-@client.command(help="This command will give you mastry levels of champions")
-async def mastery(ctx, summonerName, championName):
-    await ctx.send(champions.get_mastery(summonerName, championName))
+@client.command(help="Get info of certain champion")
+async def champion(
+    ctx: Context, champion_name: str, full_stats: bool = False, s: str = SERVER
+):
+    champion = Champions(API_KEY, s)
+    if full_stats:
+        champion_data = dict()
+        champion_data['info'] = await champion.get_champion_info(champion_name)
+        champion_data['stats'] = await champion.get_champion_stats(champion_name)
+        ctx.send(champion_data)
+    else:
+        await ctx.send(champion.get_champion_info(champion_name))
 
 
-@client.command(help="This command will give you all champions in alphabetical order")
-async def allChampions(ctx):
-    await ctx.send(champions.getAllChampions())
+@client.command(help="Get mastery of specific champion")
+async def mastery(
+    ctx: Context, summoner_name: str, champion_name: str, s: str = SERVER
+):
+    summoner = Summoners(summoner_name, API_KEY, s)
+    await ctx.send(summoner.get_champion_mastery(champion_name))
 
 
-@client.command(help="This command will return the information of the entered champion")
-async def champion(ctx, championName):
-    await ctx.send(champions.get_champion_info(championName))
+@client.command(help="Get full stats of the last game")
+async def last_match(ctx: Context, summoner_name: str, s: str = SERVER):
+    summoner = Summoners(summoner_name, API_KEY, s)
+    await ctx.send(summoner.get_last_match())
 
 
-@client.command(help="This command will give you a full stats of the last game")
-async def lastMatch(ctx: commands.Context, *, summonerName):
-    DATASET = getLastMatch(summonerName)
-    highlight = [
-        "champion      win      Kills      Deaths      assists      cs"
-    ]  #  total-damage  gold-earned  champion-level
-    description = "```" + "\n".join(highlight) + "```"
-    i = 0
-    for data in DATASET:
-        highlight.append(
-            ((" " * 6) + (" " * len(highlight[0].split(" " * 6)[0]))).join(
-                [str(item).center(0) for item in data]
-            )
-        )
-        # highlight.append((str(highlight[0].split(" " * 6)[i]) + ' - ').join(data))
-        # print(data)
-        i += 1
-
-    description = "```" + "\n".join(highlight) + "```"
-    await ctx.send(
-        embed=discord.Embed(title="Last Match Stats", description=description)
-    )
-    print(highlight)
+@client.command(help="Get summoner stats")
+async def summoner(ctx: Context, summoner_name: str, s: str = SERVER):
+    summoner = Summoners(summoner_name, API_KEY, s)
+    await ctx.send(summoner.get_stats())
 
 
 keep_alive()
